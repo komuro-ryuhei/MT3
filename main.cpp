@@ -12,6 +12,19 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2) {
 	);
 }
 
+bool IsBackface(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector3& cameraPos) {
+	Vector3 edge1 = v1 - v0;
+	Vector3 edge2 = v2 - v0;
+	Vector3 normal = Cross(edge1, edge2);
+	Vector3 viewDirection = cameraPos - v0;
+
+	// 法線ベクトルとカメラの方向ベクトルとの内積を計算
+	float dotProduct = Dot(normal, viewDirection);
+
+	// 内積が負であれば背面
+	return dotProduct < 0;
+}
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -23,7 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Vector3 rotate{ 0.0f,0.0f,0.0f };
-	Vector3 translate{0.0f,0.0f,0.0f};
+	Vector3 translate{ 0.0f,0.0f,0.0f };
 
 	Vector3 cameraPosition{ 0.0f,0.0f,-5.0f };
 
@@ -75,7 +88,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 		Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
-		
+
 		Vector3 screenVertices[3];
 		for (uint32_t i = 0; i < 3; ++i) {
 			Vector3 ndcVertex = Transform(kLocalVertices[i], worldViewProjectionMatrix);
@@ -92,11 +105,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		VectorScreenPrintf(0, 0, cross, "Cross");
 
-		Novice::DrawTriangle(
-			int(screenVertices[0].x), int(screenVertices[0].y),
-			int(screenVertices[1].x), int(screenVertices[1].y),
-			int(screenVertices[2].x), int(screenVertices[2].y),
-			RED, kFillModeSolid);
+		// 背面カリング
+		if (!IsBackface(screenVertices[0], screenVertices[1], screenVertices[2], cameraPosition)) {
+			// 背面でなければ三角形を描画
+			Novice::DrawTriangle(
+				int(screenVertices[0].x), int(screenVertices[0].y),
+				int(screenVertices[1].x), int(screenVertices[1].y),
+				int(screenVertices[2].x), int(screenVertices[2].y),
+				RED, kFillModeSolid);
+		}
 
 		///
 		/// ↑描画処理ここまで
