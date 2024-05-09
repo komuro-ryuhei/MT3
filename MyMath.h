@@ -404,6 +404,90 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 	return affineMatrix;
 }
 
+// 透視投影行列
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+
+	Matrix4x4 perspectiveFoVMatrix;
+
+	perspectiveFoVMatrix.m[0][0] = 1.0f / (aspectRatio * std::tan(fovY / 2));;
+	perspectiveFoVMatrix.m[0][1] = 0.0f;
+	perspectiveFoVMatrix.m[0][2] = 0.0f;
+	perspectiveFoVMatrix.m[0][3] = 0.0f;
+
+	perspectiveFoVMatrix.m[1][0] = 0.0f;
+	perspectiveFoVMatrix.m[1][1] = 1.0f / (std::tan(fovY / 2));
+	perspectiveFoVMatrix.m[1][2] = 0.0f;
+	perspectiveFoVMatrix.m[1][3] = 0.0f;
+
+	perspectiveFoVMatrix.m[2][0] = 0.0f;
+	perspectiveFoVMatrix.m[2][1] = 0.0f;
+	perspectiveFoVMatrix.m[2][2] = farClip / (farClip - nearClip);
+	perspectiveFoVMatrix.m[2][3] = 1.0f;
+
+	perspectiveFoVMatrix.m[3][0] = 0.0f;
+	perspectiveFoVMatrix.m[3][1] = 0.0f;
+	perspectiveFoVMatrix.m[3][2] = -nearClip * farClip / (farClip - nearClip);
+	perspectiveFoVMatrix.m[3][3] = 0.0f;
+
+	return perspectiveFoVMatrix;
+}
+
+// 正射影行列
+Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+
+	Matrix4x4 orthographicMatrix;
+
+	orthographicMatrix.m[0][0] = 2.0f / (right - left);
+	orthographicMatrix.m[0][1] = 0.0f;
+	orthographicMatrix.m[0][2] = 0.0f;
+	orthographicMatrix.m[0][3] = 0.0f;
+
+	orthographicMatrix.m[1][0] = 0.0f;
+	orthographicMatrix.m[1][1] = 2.0f / (top - bottom);
+	orthographicMatrix.m[1][2] = 0.0f;
+	orthographicMatrix.m[1][3] = 0.0f;
+
+	orthographicMatrix.m[2][0] = 0.0f;
+	orthographicMatrix.m[2][1] = 0.0f;
+	orthographicMatrix.m[2][2] = 1.0f / (farClip - nearClip);
+	orthographicMatrix.m[2][3] = 0.0f;
+
+	orthographicMatrix.m[3][0] = (left + right) / (left - right);
+	orthographicMatrix.m[3][1] = (top + bottom) / (bottom - top);
+	orthographicMatrix.m[3][2] = nearClip / (nearClip - farClip);
+	orthographicMatrix.m[3][3] = 1.0f;
+
+	return orthographicMatrix;
+}
+
+// ビューポート変換行列
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+
+	Matrix4x4 viewportMatrix;
+
+	viewportMatrix.m[0][0] = width / 2.0f;
+	viewportMatrix.m[0][1] = 0.0f;
+	viewportMatrix.m[0][2] = 0.0f;
+	viewportMatrix.m[0][3] = 0.0f;
+
+	viewportMatrix.m[1][0] = 0.0f;
+	viewportMatrix.m[1][1] = -height / 2.0f;
+	viewportMatrix.m[1][2] = 0.0f;
+	viewportMatrix.m[1][3] = 0.0f;
+
+	viewportMatrix.m[2][0] = 0.0f;
+	viewportMatrix.m[2][1] = 0.0f;
+	viewportMatrix.m[2][2] = maxDepth - minDepth;
+	viewportMatrix.m[2][3] = 0.0f;
+
+	viewportMatrix.m[3][0] = left + width / 2.0f;
+	viewportMatrix.m[3][1] = top + height / 2.0f;
+	viewportMatrix.m[3][2] = minDepth;
+	viewportMatrix.m[3][3] = 1.0f;
+
+	return viewportMatrix;
+}
+
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
 	const float kGridHalfWidth = 2.0f; // Grid半分の幅
 	const uint32_t kSubdivision = 10; // 分割数
