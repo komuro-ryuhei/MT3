@@ -2,11 +2,17 @@
 #include <Novice.h>
 #include "Vector3.h"
 #include "Matrix4x4.h"
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <assert.h>
 
 static const int kRowHeight = 20;
 static const int kColumnWidth = 60;
+
+struct Sphere {
+	Vector3 center;
+	float radius;
+};
 
 // 表示(Vector3)
 void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
@@ -398,7 +404,6 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 	return affineMatrix;
 }
 
-// グリッド表示関数
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
 	const float kGridHalfWidth = 2.0f; // Grid半分の幅
 	const uint32_t kSubdivision = 10; // 分割数
@@ -425,3 +430,71 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMa
 			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0xAAAAAAFF);
 		}
 	}
+
+	// 左から右も同じように順々に引いていく
+	for (uint32_t zIndex = 0; zIndex <= kSubdivision; ++zIndex) {
+		// ワールド座標系上の始点と終点を求める
+		Vector3 start(-kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
+		Vector3 end(kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
+
+		// ビュープロジェクション行列とビューポート行列を使用してスクリーン座標系に変換
+		Vector3 screenStart = Transform(start, viewProjectionMatrix);
+		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
+
+		// スクリーン座標系からビューポート座標系に変換
+		screenStart = Transform(screenStart, viewPortMatrix);
+		screenEnd = Transform(screenEnd, viewPortMatrix);
+
+		// 変換した座標を使って表示
+		if (zIndex == 5) {
+			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
+		} else {
+			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0xAAAAAAFF);
+		}
+	}
+}
+
+void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
+	const uint32_t kSubdivision = 16;
+	const float kLatEvery = static_cast<float>(M_PI / kSubdivision); // 緯度分割1つ分の角度
+	const float kLonEvery = static_cast<float>((M_PI * 2) / kSubdivision); // 経度分割1つ分の角度
+
+	// 緯度の方向に分割 -π/2 ~ π/2
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
+		float lat = static_cast<float>(-M_PI / 2.0f) + kLatEvery * latIndex; // 現在の緯度
+
+		// 経度方向に分割 0 ~ 2π
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+			float lon = lonIndex * kLonEvery; // 現在の経度
+
+			// world座標系でのa,b,cを求める
+			Vector3 a, b, c;
+			a = { sphere.radius * std::cos(lat) * std::cos(lon) + sphere.center.x,
+				  sphere.radius * std::sin(lat) + sphere.center.y,
+				  sphere.radius * std::cos(lat) * std::sin(lon) + sphere.center.z };
+
+			b = { sphere.radius * std::cos(lat + kLatEvery) * std::cos(lon) + sphere.center.x,
+				  sphere.radius * std::sin(lat + kLatEvery) + sphere.center.y,
+				  sphere.radius * std::cos(lat + kLatEvery) * std::sin(lon) + sphere.center.z };
+
+			c = { sphere.radius * std::cos(lat) * std::cos(lon + kLonEvery) + sphere.center.x,
+				  sphere.radius * std::sin(lat) + sphere.center.y,
+				  sphere.radius * std::cos(lat) * std::sin(lon + kLonEvery) + sphere.center.z };
+
+			// a,b,cをスクリーン座標まで変換
+			// ビュープロジェクション行列とビューポート行列を使用してスクリーン座標系に変換
+			Vector3 screenA = Transform(a, viewProjectionMatrix);
+			Vector3 screenB = Transform(b, viewProjectionMatrix);
+			Vector3 screenC = Transform(c, viewProjectionMatrix);
+
+			// スクリーン座標系からビューポート座標系に変換
+			screenA = Transform(screenA, viewPortMatrix);
+			screenB = Transform(screenB, viewPortMatrix);
+			screenC = Transform(screenC, viewPortMatrix);
+
+			// ab,bcで線を引く
+			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenB.x), int(screenB.y), color);
+			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenC.x), int(screenC.y), color);
+		}
+	}
+}
