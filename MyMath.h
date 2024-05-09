@@ -14,7 +14,7 @@ struct Sphere {
 	float radius;
 };
 
-// •\¦(Vector3)
+// è¡¨ç¤º(Vector3)
 void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
 
 	Novice::ScreenPrintf(x, y, "%3.2f", vector.x);
@@ -23,7 +23,7 @@ void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) 
 	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
 }
 
-// •\¦(Matrix4x4)
+// è¡¨ç¤º(Matrix4x4)
 void MatrixScreenPrintf(int x, int y, Matrix4x4 matrix) {
 	for (int row = 0; row < 4; row++) {
 		for (int column = 0; column < 4; column++) {
@@ -33,37 +33,37 @@ void MatrixScreenPrintf(int x, int y, Matrix4x4 matrix) {
 	}
 }
 
-//@‰ÁZ(Vector3)
+//ã€€åŠ ç®—(Vector3)
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 
 	return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
 
-//@Œ¸Z(Vector3)
+//ã€€æ¸›ç®—(Vector3)
 Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 
 	return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
-//@ƒXƒJƒ‰[”{(Vector3)
+//ã€€ã‚¹ã‚«ãƒ©ãƒ¼å€(Vector3)
 Vector3 Multiply(float scalar, const Vector3& v) {
 
 	return Vector3(scalar * v.x, scalar * v.y, scalar * v.z);
 }
 
-// “àÏ(Vector3)
+// å†…ç©(Vector3)
 float Dot(const Vector3& v1, const Vector3& v2) {
 
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-//@’·‚³(ƒmƒ‹ƒ€)(Vector3)
+//ã€€é•·ã•(ãƒãƒ«ãƒ )(Vector3)
 float Length(const Vector3& v) {
 
 	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-// ³‹K‰»(Vector3)
+// æ­£è¦åŒ–(Vector3)
 Vector3 Normalize(const Vector3& v) {
 
 	float length = Length(v);
@@ -75,7 +75,27 @@ Vector3 Normalize(const Vector3& v) {
 	}
 }
 
-// ‰ÁZ(Matrix4x4)
+// ã‚¯ãƒ©ãƒ³ãƒ—
+float clamp(float value, float min, float max) {
+	if (value > max) {
+		return max;
+	} else if (value < min) {
+		return min;
+	} else {
+		return value;
+	}
+}
+
+// è·é›¢ã®è¨ˆç®—
+float distance(const Vector3& v1, const Vector3& v2) {
+	float dx = v1.x - v2.x;
+	float dy = v1.y - v2.y;
+	float dz = v1.z - v2.z;
+	return sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+
+// åŠ ç®—(Matrix4x4)
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
 
@@ -87,7 +107,7 @@ Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// Œ¸Z(Matrix4x4)
+// æ¸›ç®—(Matrix4x4)
 Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
 
@@ -99,7 +119,7 @@ Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// Ï(Matrix4x4)
+// ç©(Matrix4x4)
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result = {};
 
@@ -113,7 +133,7 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// ‹ts—ñ
+// é€†è¡Œåˆ—
 Matrix4x4 Inverse4x4(Matrix4x4& matrix) {
 	Matrix4x4 result = {};
 
@@ -212,7 +232,7 @@ Matrix4x4 Inverse4x4(Matrix4x4& matrix) {
 	return result;
 }
 
-// “]’us—ñ
+// è»¢ç½®è¡Œåˆ—
 Matrix4x4 Transpose4x4(Matrix4x4& matrix) {
 	Matrix4x4 result;
 
@@ -224,7 +244,7 @@ Matrix4x4 Transpose4x4(Matrix4x4& matrix) {
 	return result;
 }
 
-// ’PˆÊs—ñ‚Ìì¬
+// å˜ä½è¡Œåˆ—ã®ä½œæˆ
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 identity;
 
@@ -236,7 +256,7 @@ Matrix4x4 MakeIdentity4x4() {
 	return identity;
 }
 
-// •½sˆÚ“®s—ñ
+// å¹³è¡Œç§»å‹•è¡Œåˆ—
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	Matrix4x4 translateMatrix;
 
@@ -263,7 +283,7 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	return translateMatrix;
 }
 
-// Šg‘åk¬s—ñ
+// æ‹¡å¤§ç¸®å°è¡Œåˆ—
 Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	Matrix4x4 scaleMatrix;
 
@@ -290,7 +310,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	return scaleMatrix;
 }
 
-// À•W•ÏŠ·
+// åº§æ¨™å¤‰æ›
 Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result;
 
@@ -384,11 +404,11 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	return rotationMatrix;
 }
 
-// 3ŸŒ³ƒAƒtƒBƒ“•ÏŠ·s—ñ
+// 3æ¬¡å…ƒã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›è¡Œåˆ—
 Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 	Matrix4x4 affineMatrix;
 
-	// Še•ÏŠ·s—ñ‚ğì¬
+	// å„å¤‰æ›è¡Œåˆ—ã‚’ä½œæˆ
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
 
 	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
@@ -398,32 +418,88 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translate);
 
-	// Še•ÏŠ·s—ñ‚ğ‡¬‚µ‚ÄƒAƒtƒBƒ“•ÏŠ·s—ñ‚ğì¬
+	// å„å¤‰æ›è¡Œåˆ—ã‚’åˆæˆã—ã¦ã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›è¡Œåˆ—ã‚’ä½œæˆ
 	affineMatrix = Multiply(scaleMatrix, Multiply(rotateXYZMatrix, translateMatrix));
 
 	return affineMatrix;
 }
 
-void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
-	const float kGridHalfWidth = 2.0f; // Grid”¼•ª‚Ì•
-	const uint32_t kSubdivision = 10; // •ªŠ„”
-	const float kGridEvery = (kGridHalfWidth * 2.0f) / float(kSubdivision); // 1‚Â•ª‚Ì’·‚³
+// é€è¦–æŠ•å½±è¡Œåˆ—
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 
-	// ‰œ‚©‚çè‘O‚Ö‚Ìü‚ğ‡X‚Éˆø‚¢‚Ä‚¢‚­
+	Matrix4x4 perspectiveFoVMatrix;
+
+	perspectiveFoVMatrix.m[0][0] = 1.0f / (aspectRatio * std::tan(fovY / 2));;
+	perspectiveFoVMatrix.m[0][1] = 0.0f;
+	perspectiveFoVMatrix.m[0][2] = 0.0f;
+	perspectiveFoVMatrix.m[0][3] = 0.0f;
+
+	perspectiveFoVMatrix.m[1][0] = 0.0f;
+	perspectiveFoVMatrix.m[1][1] = 1.0f / (std::tan(fovY / 2));
+	perspectiveFoVMatrix.m[1][2] = 0.0f;
+	perspectiveFoVMatrix.m[1][3] = 0.0f;
+
+	perspectiveFoVMatrix.m[2][0] = 0.0f;
+	perspectiveFoVMatrix.m[2][1] = 0.0f;
+	perspectiveFoVMatrix.m[2][2] = farClip / (farClip - nearClip);
+	perspectiveFoVMatrix.m[2][3] = 1.0f;
+
+	perspectiveFoVMatrix.m[3][0] = 0.0f;
+	perspectiveFoVMatrix.m[3][1] = 0.0f;
+	perspectiveFoVMatrix.m[3][2] = -nearClip * farClip / (farClip - nearClip);
+	perspectiveFoVMatrix.m[3][3] = 0.0f;
+
+	return perspectiveFoVMatrix;
+}
+
+// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆå¤‰æ›è¡Œåˆ—
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+
+	Matrix4x4 viewportMatrix;
+
+	viewportMatrix.m[0][0] = width / 2.0f;
+	viewportMatrix.m[0][1] = 0.0f;
+	viewportMatrix.m[0][2] = 0.0f;
+	viewportMatrix.m[0][3] = 0.0f;
+
+	viewportMatrix.m[1][0] = 0.0f;
+	viewportMatrix.m[1][1] = -height / 2.0f;
+	viewportMatrix.m[1][2] = 0.0f;
+	viewportMatrix.m[1][3] = 0.0f;
+
+	viewportMatrix.m[2][0] = 0.0f;
+	viewportMatrix.m[2][1] = 0.0f;
+	viewportMatrix.m[2][2] = maxDepth - minDepth;
+	viewportMatrix.m[2][3] = 0.0f;
+
+	viewportMatrix.m[3][0] = left + width / 2.0f;
+	viewportMatrix.m[3][1] = top + height / 2.0f;
+	viewportMatrix.m[3][2] = minDepth;
+	viewportMatrix.m[3][3] = 1.0f;
+
+	return viewportMatrix;
+}
+
+void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
+	const float kGridHalfWidth = 2.0f; // GridåŠåˆ†ã®å¹…
+	const uint32_t kSubdivision = 10; // åˆ†å‰²æ•°
+	const float kGridEvery = (kGridHalfWidth * 2.0f) / float(kSubdivision); // 1ã¤åˆ†ã®é•·ã•
+
+	// å¥¥ã‹ã‚‰æ‰‹å‰ã¸ã®ç·šã‚’é †ã€…ã«å¼•ã„ã¦ã„ã
 	for (uint32_t xIndex = 0; xIndex <= kSubdivision; ++xIndex) {
-		// ƒ[ƒ‹ƒhÀ•WŒnã‚Ìn“_‚ÆI“_‚ğ‹‚ß‚é
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ä¸Šã®å§‹ç‚¹ã¨çµ‚ç‚¹ã‚’æ±‚ã‚ã‚‹
 		Vector3 start(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, -kGridHalfWidth);
 		Vector3 end(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, kGridHalfWidth);
 
-		// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+		// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 		Vector3 screenStart = Transform(start, viewProjectionMatrix);
 		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
 
-		// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+		// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 		screenStart = Transform(screenStart, viewPortMatrix);
 		screenEnd = Transform(screenEnd, viewPortMatrix);
 
-		// •ÏŠ·‚µ‚½À•W‚ğg‚Á‚Ä•\¦
+		// å¤‰æ›ã—ãŸåº§æ¨™ã‚’ä½¿ã£ã¦è¡¨ç¤º
 		if (xIndex == 5) {
 			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
 		} else {
@@ -431,21 +507,21 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMa
 		}
 	}
 
-	// ¶‚©‚ç‰E‚à“¯‚¶‚æ‚¤‚É‡X‚Éˆø‚¢‚Ä‚¢‚­
+	// å·¦ã‹ã‚‰å³ã‚‚åŒã˜ã‚ˆã†ã«é †ã€…ã«å¼•ã„ã¦ã„ã
 	for (uint32_t zIndex = 0; zIndex <= kSubdivision; ++zIndex) {
-		// ƒ[ƒ‹ƒhÀ•WŒnã‚Ìn“_‚ÆI“_‚ğ‹‚ß‚é
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ä¸Šã®å§‹ç‚¹ã¨çµ‚ç‚¹ã‚’æ±‚ã‚ã‚‹
 		Vector3 start(-kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
 		Vector3 end(kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
 
-		// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+		// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 		Vector3 screenStart = Transform(start, viewProjectionMatrix);
 		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
 
-		// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+		// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 		screenStart = Transform(screenStart, viewPortMatrix);
 		screenEnd = Transform(screenEnd, viewPortMatrix);
 
-		// •ÏŠ·‚µ‚½À•W‚ğg‚Á‚Ä•\¦
+		// å¤‰æ›ã—ãŸåº§æ¨™ã‚’ä½¿ã£ã¦è¡¨ç¤º
 		if (zIndex == 5) {
 			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
 		} else {
@@ -456,18 +532,18 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMa
 
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
 	const uint32_t kSubdivision = 16;
-	const float kLatEvery = static_cast<float>(M_PI / kSubdivision); // ˆÜ“x•ªŠ„1‚Â•ª‚ÌŠp“x
-	const float kLonEvery = static_cast<float>((M_PI * 2) / kSubdivision); // Œo“x•ªŠ„1‚Â•ª‚ÌŠp“x
+	const float kLatEvery = static_cast<float>(M_PI / kSubdivision); // ç·¯åº¦åˆ†å‰²1ã¤åˆ†ã®è§’åº¦
+	const float kLonEvery = static_cast<float>((M_PI * 2) / kSubdivision); // çµŒåº¦åˆ†å‰²1ã¤åˆ†ã®è§’åº¦
 
-	// ˆÜ“x‚Ì•ûŒü‚É•ªŠ„ -ƒÎ/2 ~ ƒÎ/2
+	// ç·¯åº¦ã®æ–¹å‘ã«åˆ†å‰² -Ï€/2 ~ Ï€/2
 	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = static_cast<float>(-M_PI / 2.0f) + kLatEvery * latIndex; // Œ»İ‚ÌˆÜ“x
+		float lat = static_cast<float>(-M_PI / 2.0f) + kLatEvery * latIndex; // ç¾åœ¨ã®ç·¯åº¦
 
-		// Œo“x•ûŒü‚É•ªŠ„ 0 ~ 2ƒÎ
+		// çµŒåº¦æ–¹å‘ã«åˆ†å‰² 0 ~ 2Ï€
 		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			float lon = lonIndex * kLonEvery; // Œ»İ‚ÌŒo“x
+			float lon = lonIndex * kLonEvery; // ç¾åœ¨ã®çµŒåº¦
 
-			// worldÀ•WŒn‚Å‚Ìa,b,c‚ğ‹‚ß‚é
+			// worldåº§æ¨™ç³»ã§ã®a,b,cã‚’æ±‚ã‚ã‚‹
 			Vector3 a, b, c;
 			a = { sphere.radius * std::cos(lat) * std::cos(lon) + sphere.center.x,
 				  sphere.radius * std::sin(lat) + sphere.center.y,
@@ -481,18 +557,18 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 				  sphere.radius * std::sin(lat) + sphere.center.y,
 				  sphere.radius * std::cos(lat) * std::sin(lon + kLonEvery) + sphere.center.z };
 
-			// a,b,c‚ğƒXƒNƒŠ[ƒ“À•W‚Ü‚Å•ÏŠ·
-			// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+			// a,b,cã‚’ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã¾ã§å¤‰æ›
+			// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 			Vector3 screenA = Transform(a, viewProjectionMatrix);
 			Vector3 screenB = Transform(b, viewProjectionMatrix);
 			Vector3 screenC = Transform(c, viewProjectionMatrix);
 
-			// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+			// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 			screenA = Transform(screenA, viewPortMatrix);
 			screenB = Transform(screenB, viewPortMatrix);
 			screenC = Transform(screenC, viewPortMatrix);
 
-			// ab,bc‚Åü‚ğˆø‚­
+			// ab,bcã§ç·šã‚’å¼•ã
 			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenB.x), int(screenB.y), color);
 			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenC.x), int(screenC.y), color);
 		}
