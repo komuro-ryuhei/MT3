@@ -397,3 +397,31 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 
 	return affineMatrix;
 }
+
+// グリッド表示関数
+void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
+	const float kGridHalfWidth = 2.0f; // Grid半分の幅
+	const uint32_t kSubdivision = 10; // 分割数
+	const float kGridEvery = (kGridHalfWidth * 2.0f) / float(kSubdivision); // 1つ分の長さ
+
+	// 奥から手前への線を順々に引いていく
+	for (uint32_t xIndex = 0; xIndex <= kSubdivision; ++xIndex) {
+		// ワールド座標系上の始点と終点を求める
+		Vector3 start(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, -kGridHalfWidth);
+		Vector3 end(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, kGridHalfWidth);
+
+		// ビュープロジェクション行列とビューポート行列を使用してスクリーン座標系に変換
+		Vector3 screenStart = Transform(start, viewProjectionMatrix);
+		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
+
+		// スクリーン座標系からビューポート座標系に変換
+		screenStart = Transform(screenStart, viewPortMatrix);
+		screenEnd = Transform(screenEnd, viewPortMatrix);
+
+		// 変換した座標を使って表示
+		if (xIndex == 5) {
+			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
+		} else {
+			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0xAAAAAAFF);
+		}
+	}
