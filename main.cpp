@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Plane plane;
 	plane.normal = { 0.0f,1.0f,0.0f };
-	plane.distance = 3.0f;
+	plane.distance = 0.5f;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
