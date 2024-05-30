@@ -8,25 +8,25 @@ struct Sphere {
 };
 
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
-	const float kGridHalfWidth = 2.0f; // Grid”¼•ª‚Ì•
-	const uint32_t kSubdivision = 10; // •ªŠ„”
-	const float kGridEvery = (kGridHalfWidth * 2.0f) / float(kSubdivision); // 1‚Â•ª‚Ì’·‚³
+	const float kGridHalfWidth = 2.0f; // GridåŠåˆ†ã®å¹…
+	const uint32_t kSubdivision = 10; // åˆ†å‰²æ•°
+	const float kGridEvery = (kGridHalfWidth * 2.0f) / float(kSubdivision); // 1ã¤åˆ†ã®é•·ã•
 
-	// ‰œ‚©‚çè‘O‚Ö‚Ìü‚ğ‡X‚Éˆø‚¢‚Ä‚¢‚­
+	// å¥¥ã‹ã‚‰æ‰‹å‰ã¸ã®ç·šã‚’é †ã€…ã«å¼•ã„ã¦ã„ã
 	for (uint32_t xIndex = 0; xIndex <= kSubdivision; ++xIndex) {
-		// ƒ[ƒ‹ƒhÀ•WŒnã‚Ìn“_‚ÆI“_‚ğ‹‚ß‚é
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ä¸Šã®å§‹ç‚¹ã¨çµ‚ç‚¹ã‚’æ±‚ã‚ã‚‹
 		Vector3 start(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, -kGridHalfWidth);
 		Vector3 end(-kGridHalfWidth + xIndex * kGridEvery, 0.0f, kGridHalfWidth);
 
-		// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+		// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 		Vector3 screenStart = Transform(start, viewProjectionMatrix);
 		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
 
-		// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+		// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 		screenStart = Transform(screenStart, viewPortMatrix);
 		screenEnd = Transform(screenEnd, viewPortMatrix);
 
-		// •ÏŠ·‚µ‚½À•W‚ğg‚Á‚Ä•\¦
+		// å¤‰æ›ã—ãŸåº§æ¨™ã‚’ä½¿ã£ã¦è¡¨ç¤º
 		if (xIndex == 5) {
 			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
 		} else {
@@ -34,21 +34,21 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMa
 		}
 	}
 
-	// ¶‚©‚ç‰E‚à“¯‚¶‚æ‚¤‚É‡X‚Éˆø‚¢‚Ä‚¢‚­
+	// å·¦ã‹ã‚‰å³ã‚‚åŒã˜ã‚ˆã†ã«é †ã€…ã«å¼•ã„ã¦ã„ã
 	for (uint32_t zIndex = 0; zIndex <= kSubdivision; ++zIndex) {
-		// ƒ[ƒ‹ƒhÀ•WŒnã‚Ìn“_‚ÆI“_‚ğ‹‚ß‚é
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ä¸Šã®å§‹ç‚¹ã¨çµ‚ç‚¹ã‚’æ±‚ã‚ã‚‹
 		Vector3 start(-kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
 		Vector3 end(kGridHalfWidth, 0.0f, -kGridHalfWidth + zIndex * kGridEvery);
 
-		// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+		// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 		Vector3 screenStart = Transform(start, viewProjectionMatrix);
 		Vector3 screenEnd = Transform(end, viewProjectionMatrix);
 
-		// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+		// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 		screenStart = Transform(screenStart, viewPortMatrix);
 		screenEnd = Transform(screenEnd, viewPortMatrix);
 
-		// •ÏŠ·‚µ‚½À•W‚ğg‚Á‚Ä•\¦
+		// å¤‰æ›ã—ãŸåº§æ¨™ã‚’ä½¿ã£ã¦è¡¨ç¤º
 		if (zIndex == 5) {
 			Novice::DrawLine(int(screenStart.x), int(screenStart.y), int(screenEnd.x), int(screenEnd.y), 0x000000FF);
 		} else {
@@ -59,18 +59,18 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMa
 
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
 	const uint32_t kSubdivision = 16;
-	const float kLatEvery = static_cast<float>(M_PI / kSubdivision); // ˆÜ“x•ªŠ„1‚Â•ª‚ÌŠp“x
-	const float kLonEvery = static_cast<float>((M_PI * 2) / kSubdivision); // Œo“x•ªŠ„1‚Â•ª‚ÌŠp“x
+	const float kLatEvery = static_cast<float>(M_PI / kSubdivision); // ç·¯åº¦åˆ†å‰²1ã¤åˆ†ã®è§’åº¦
+	const float kLonEvery = static_cast<float>((M_PI * 2) / kSubdivision); // çµŒåº¦åˆ†å‰²1ã¤åˆ†ã®è§’åº¦
 
-	// ˆÜ“x‚Ì•ûŒü‚É•ªŠ„ -ƒÎ/2 ~ ƒÎ/2
+	// ç·¯åº¦ã®æ–¹å‘ã«åˆ†å‰² -Ï€/2 ~ Ï€/2
 	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = static_cast<float>(-M_PI / 2.0f) + kLatEvery * latIndex; // Œ»İ‚ÌˆÜ“x
+		float lat = static_cast<float>(-M_PI / 2.0f) + kLatEvery * latIndex; // ç¾åœ¨ã®ç·¯åº¦
 
-		// Œo“x•ûŒü‚É•ªŠ„ 0 ~ 2ƒÎ
+		// çµŒåº¦æ–¹å‘ã«åˆ†å‰² 0 ~ 2Ï€
 		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			float lon = lonIndex * kLonEvery; // Œ»İ‚ÌŒo“x
+			float lon = lonIndex * kLonEvery; // ç¾åœ¨ã®çµŒåº¦
 
-			// worldÀ•WŒn‚Å‚Ìa,b,c‚ğ‹‚ß‚é
+			// worldåº§æ¨™ç³»ã§ã®a,b,cã‚’æ±‚ã‚ã‚‹
 			Vector3 a, b, c;
 			a = { sphere.radius * std::cos(lat) * std::cos(lon) + sphere.center.x,
 				  sphere.radius * std::sin(lat) + sphere.center.y,
@@ -84,18 +84,18 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 				  sphere.radius * std::sin(lat) + sphere.center.y,
 				  sphere.radius * std::cos(lat) * std::sin(lon + kLonEvery) + sphere.center.z };
 
-			// a,b,c‚ğƒXƒNƒŠ[ƒ“À•W‚Ü‚Å•ÏŠ·
-			// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Æƒrƒ…[ƒ|[ƒgs—ñ‚ğg—p‚µ‚ÄƒXƒNƒŠ[ƒ“À•WŒn‚É•ÏŠ·
+			// a,b,cã‚’ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã¾ã§å¤‰æ›
+			// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã¨ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã«å¤‰æ›
 			Vector3 screenA = Transform(a, viewProjectionMatrix);
 			Vector3 screenB = Transform(b, viewProjectionMatrix);
 			Vector3 screenC = Transform(c, viewProjectionMatrix);
 
-			// ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒrƒ…[ƒ|[ƒgÀ•WŒn‚É•ÏŠ·
+			// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåº§æ¨™ç³»ã«å¤‰æ›
 			screenA = Transform(screenA, viewPortMatrix);
 			screenB = Transform(screenB, viewPortMatrix);
 			screenC = Transform(screenC, viewPortMatrix);
 
-			// ab,bc‚Åü‚ğˆø‚­
+			// ab,bcã§ç·šã‚’å¼•ã
 			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenB.x), int(screenB.y), color);
 			Novice::DrawLine(int(screenA.x), int(screenA.y), int(screenC.x), int(screenC.y), color);
 		}
@@ -103,18 +103,18 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 }
 
 struct Line {
-	Vector3 origin; //!< n“_
-	Vector3 diff; //!< I“_‚Ö‚Ì·•ªƒxƒNƒgƒ‹
+	Vector3 origin; //!< å§‹ç‚¹
+	Vector3 diff; //!< çµ‚ç‚¹ã¸ã®å·®åˆ†ãƒ™ã‚¯ãƒˆãƒ«
 };
 
 struct Ray {
-	Vector3 origin; //!< n“_
-	Vector3 diff; //!< I“_‚Ö‚Ì·•ªƒxƒNƒgƒ‹
+	Vector3 origin; //!< å§‹ç‚¹
+	Vector3 diff; //!< çµ‚ç‚¹ã¸ã®å·®åˆ†ãƒ™ã‚¯ãƒˆãƒ«
 };
 
 struct Segment {
-	Vector3 origin; //!< n“_
-	Vector3 diff; //!< I“_‚Ö‚Ì·•ªƒxƒNƒgƒ‹
+	Vector3 origin; //!< å§‹ç‚¹
+	Vector3 diff; //!< çµ‚ç‚¹ã¸ã®å·®åˆ†ãƒ™ã‚¯ãƒˆãƒ«
 };
 
 Vector3 Project(const Vector3& v1, const Vector3& v2) {
@@ -125,20 +125,20 @@ Vector3 Project(const Vector3& v1, const Vector3& v2) {
 	return Vector3(v2.x * scaleFactor, v2.y * scaleFactor, v2.z * scaleFactor);
 }
 
-// ClosestPointŠÖ”
+// ClosestPointé–¢æ•°
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 startToPoint = { point.x - segment.origin.x, point.y - segment.origin.y, point.z - segment.origin.z };
 	float t = Dot(startToPoint, segment.diff) / Dot(segment.diff, segment.diff);
 
-	// ü•ª‚Ì’[“_‚ªÅ‚à‹ß‚¢ê‡
+	// ç·šåˆ†ã®ç«¯ç‚¹ãŒæœ€ã‚‚è¿‘ã„å ´åˆ
 	if (t <= 0) {
 		return segment.origin;
 	}
-	// ü•ª‚Ì’[“_‚ªÅ‚à‹ß‚¢ê‡
+	// ç·šåˆ†ã®ç«¯ç‚¹ãŒæœ€ã‚‚è¿‘ã„å ´åˆ
 	else if (t >= 1) {
 		return { segment.origin.x + segment.diff.x, segment.origin.y + segment.diff.y, segment.origin.z + segment.diff.z };
 	}
-	// ü•ª‚Ì“à•”‚É‚ ‚éê‡
+	// ç·šåˆ†ã®å†…éƒ¨ã«ã‚ã‚‹å ´åˆ
 	else {
 		return { segment.origin.x + t * segment.diff.x,
 				 segment.origin.y + t * segment.diff.y,
@@ -147,8 +147,8 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 }
 
 struct Plane {
-	Vector3 normal; // –@ü
-	float distance; // ‹——£
+	Vector3 normal; // æ³•ç·š
+	float distance; // è·é›¢
 };
 
 Vector3 Perpendicular(const Vector3& vector) {
@@ -173,8 +173,8 @@ void DrawPlane(const Plane& plane, const Matrix4x4& viewProjectionMatrix, const 
 		Vector3 point = Add(center, extend);
 		points[index] = Transform(Transform(point, viewProjectionMatrix), viewportMatrix);
 	}
-	// points‚ğ‚»‚ê‚¼‚êŒ‹‚ñ‚ÅDrawLine‹éŒ`‚ğ•`‰æ
-	 // ³•ûŒ`‚ğ•`‰æ
+	// pointsã‚’ãã‚Œãã‚Œçµã‚“ã§DrawLineçŸ©å½¢ã‚’æç”»
+	 // æ­£æ–¹å½¢ã‚’æç”»
 	Novice::DrawLine(int(points[0].x), int(points[0].y), int(points[2].x), int(points[2].y), color);
 	Novice::DrawLine(int(points[2].x), int(points[2].y), int(points[1].x), int(points[1].y), RED);
 	Novice::DrawLine(int(points[1].x), int(points[1].y), int(points[3].x), int(points[3].y), GREEN);
