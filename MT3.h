@@ -2,6 +2,7 @@
 
 #include "MyMath.h"
 
+// 球
 struct Sphere {
 	Vector3 center;
 	float radius;
@@ -102,6 +103,7 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 	}
 }
 
+// 線
 struct Line {
 	Vector3 origin; //!< 始点
 	Vector3 diff; //!< 終点への差分ベクトル
@@ -146,6 +148,7 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 	}
 }
 
+// 平面
 struct Plane {
 	Vector3 normal; // 法線
 	float distance; // 距離
@@ -179,4 +182,30 @@ void DrawPlane(const Plane& plane, const Matrix4x4& viewProjectionMatrix, const 
 	Novice::DrawLine(int(points[2].x), int(points[2].y), int(points[1].x), int(points[1].y), RED);
 	Novice::DrawLine(int(points[1].x), int(points[1].y), int(points[3].x), int(points[3].y), GREEN);
 	Novice::DrawLine(int(points[3].x), int(points[3].y), int(points[0].x), int(points[0].y), BLUE);
+}
+
+// 三角形
+struct Triangle {
+	Vector3 vertices[3]; // 頂点
+};
+
+void DrawTriangle(
+	const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	// 三角形の頂点をスクリーンスペースに変換
+	Vector3 transformedVertices[3];
+	for (int i = 0; i < 3; ++i) {
+		// viewProjection行列を適用
+		transformedVertices[i] = Transform(triangle.vertices[i], viewProjectionMatrix);
+		// viewport行列を適用
+		transformedVertices[i] = Transform(transformedVertices[i], viewportMatrix);
+	}
+
+	// 頂点間に線を描画して三角形を形成
+	Novice::DrawLine(int(transformedVertices[0].x), int(transformedVertices[0].y),
+		int(transformedVertices[1].x), int(transformedVertices[1].y), color);
+	Novice::DrawLine(int(transformedVertices[1].x), int(transformedVertices[1].y),
+		int(transformedVertices[2].x), int(transformedVertices[2].y), color);
+	Novice::DrawLine(int(transformedVertices[2].x), int(transformedVertices[2].y),
+		int(transformedVertices[0].x), int(transformedVertices[0].y), color);
 }
