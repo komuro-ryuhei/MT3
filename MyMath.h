@@ -1,7 +1,10 @@
 #pragma once
 #include <Novice.h>
+
 #include "Vector3.h"
+#include "Vector4.h"
 #include "Matrix4x4.h"
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <assert.h>
@@ -9,7 +12,7 @@
 static const int kRowHeight = 20;
 static const int kColumnWidth = 60;
 
-// •\Ž¦(Vector3)
+// è¡¨ç¤º(Vector3)
 void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
 
 	Novice::ScreenPrintf(x, y, "%3.2f", vector.x);
@@ -18,7 +21,7 @@ void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) 
 	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
 }
 
-// •\Ž¦(Matrix4x4)
+// è¡¨ç¤º(Matrix4x4)
 void MatrixScreenPrintf(int x, int y, Matrix4x4 matrix) {
 	for (int row = 0; row < 4; row++) {
 		for (int column = 0; column < 4; column++) {
@@ -28,37 +31,37 @@ void MatrixScreenPrintf(int x, int y, Matrix4x4 matrix) {
 	}
 }
 
-//@‰ÁŽZ(Vector3)
+//ã€€åŠ ç®—(Vector3)
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 
 	return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
 
-//@Œ¸ŽZ(Vector3)
+//ã€€æ¸›ç®—(Vector3)
 Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 
 	return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
-//@ƒXƒJƒ‰[”{(Vector3)
+//ã€€ã‚¹ã‚«ãƒ©ãƒ¼å€(Vector3)
 Vector3 Multiply(float scalar, const Vector3& v) {
 
 	return Vector3(scalar * v.x, scalar * v.y, scalar * v.z);
 }
 
-// “àÏ(Vector3)
+// å†…ç©(Vector3)
 float Dot(const Vector3& v1, const Vector3& v2) {
 
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-//@’·‚³(ƒmƒ‹ƒ€)(Vector3)
+//ã€€é•·ã•(ãƒŽãƒ«ãƒ )(Vector3)
 float Length(const Vector3& v) {
 
 	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-// ³‹K‰»(Vector3)
+// æ­£è¦åŒ–(Vector3)
 Vector3 Normalize(const Vector3& v) {
 
 	float length = Length(v);
@@ -70,7 +73,7 @@ Vector3 Normalize(const Vector3& v) {
 	}
 }
 
-// ‰ÁŽZ(Matrix4x4)
+// åŠ ç®—(Matrix4x4)
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
 
@@ -82,7 +85,7 @@ Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// Œ¸ŽZ(Matrix4x4)
+// æ¸›ç®—(Matrix4x4)
 Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
 
@@ -94,7 +97,7 @@ Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// Ï(Matrix4x4)
+// ç©(Matrix4x4)
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result = {};
 
@@ -108,7 +111,7 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// ƒNƒƒXÏ
+// ã‚¯ãƒ­ã‚¹ç©
 Vector3 Cross(const Vector3& v1, const Vector3& v2) {
 
 	return Vector3(
@@ -118,7 +121,7 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2) {
 	);
 }
 
-// ‹ts—ñ
+// é€†è¡Œåˆ—
 Matrix4x4 Inverse4x4(Matrix4x4& matrix) {
 	Matrix4x4 result = {};
 
@@ -217,7 +220,7 @@ Matrix4x4 Inverse4x4(Matrix4x4& matrix) {
 	return result;
 }
 
-// “]’us—ñ
+// è»¢ç½®è¡Œåˆ—
 Matrix4x4 Transpose4x4(Matrix4x4& matrix) {
 	Matrix4x4 result;
 
@@ -229,7 +232,7 @@ Matrix4x4 Transpose4x4(Matrix4x4& matrix) {
 	return result;
 }
 
-// ’PˆÊs—ñ‚Ìì¬
+// å˜ä½è¡Œåˆ—ã®ä½œæˆ
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 identity;
 
@@ -241,7 +244,7 @@ Matrix4x4 MakeIdentity4x4() {
 	return identity;
 }
 
-// •½sˆÚ“®s—ñ
+// å¹³è¡Œç§»å‹•è¡Œåˆ—
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	Matrix4x4 translateMatrix;
 
@@ -268,7 +271,7 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	return translateMatrix;
 }
 
-// Šg‘åk¬s—ñ
+// æ‹¡å¤§ç¸®å°è¡Œåˆ—
 Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	Matrix4x4 scaleMatrix;
 
@@ -295,7 +298,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	return scaleMatrix;
 }
 
-// À•W•ÏŠ·
+// åº§æ¨™å¤‰æ›
 Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result;
 
@@ -389,11 +392,11 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	return rotationMatrix;
 }
 
-// 3ŽŸŒ³ƒAƒtƒBƒ“•ÏŠ·s—ñ
+// 3æ¬¡å…ƒã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›è¡Œåˆ—
 Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 	Matrix4x4 affineMatrix;
 
-	// Še•ÏŠ·s—ñ‚ðì¬
+	// å„å¤‰æ›è¡Œåˆ—ã‚’ä½œæˆ
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale);
 
 	Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
@@ -403,13 +406,13 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translate);
 
-	// Še•ÏŠ·s—ñ‚ð‡¬‚µ‚ÄƒAƒtƒBƒ“•ÏŠ·s—ñ‚ðì¬
+	// å„å¤‰æ›è¡Œåˆ—ã‚’åˆæˆã—ã¦ã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›è¡Œåˆ—ã‚’ä½œæˆ
 	affineMatrix = Multiply(scaleMatrix, Multiply(rotateXYZMatrix, translateMatrix));
 
 	return affineMatrix;
 }
 
-// “§Ž‹“Š‰es—ñ
+// é€è¦–æŠ•å½±è¡Œåˆ—
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 
 	Matrix4x4 perspectiveFoVMatrix;
@@ -437,7 +440,7 @@ Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip
 	return perspectiveFoVMatrix;
 }
 
-// ³ŽË‰es—ñ
+// æ­£å°„å½±è¡Œåˆ—
 Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
 
 	Matrix4x4 orthographicMatrix;
@@ -465,7 +468,7 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 	return orthographicMatrix;
 }
 
-// ƒrƒ…[ƒ|[ƒg•ÏŠ·s—ñ
+// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆå¤‰æ›è¡Œåˆ—
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
 
 	Matrix4x4 viewportMatrix;
