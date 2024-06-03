@@ -209,3 +209,45 @@ void DrawTriangle(
 	Novice::DrawLine(int(transformedVertices[2].x), int(transformedVertices[2].y),
 		int(transformedVertices[0].x), int(transformedVertices[0].y), color);
 }
+
+// AABB
+struct AABB {
+	Vector3 min; // 最小店
+	Vector3 max; // 最大店
+};
+
+// AABBの描画
+void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
+
+	// AABBの8つの頂点を定義
+	Vector3 vertices[8] = {
+		{aabb.min.x, aabb.min.y, aabb.min.z},
+		{aabb.max.x, aabb.min.y, aabb.min.z},
+		{aabb.min.x, aabb.max.y, aabb.min.z},
+		{aabb.max.x, aabb.max.y, aabb.min.z},
+		{aabb.min.x, aabb.min.y, aabb.max.z},
+		{aabb.max.x, aabb.min.y, aabb.max.z},
+		{aabb.min.x, aabb.max.y, aabb.max.z},
+		{aabb.max.x, aabb.max.y, aabb.max.z}
+	};
+
+	// 変換行列を適用してスクリーンスペースに変換
+	for (int i = 0; i < 8; ++i) {
+		Vector3 transformedVertex = Transform(vertices[i], viewProjectionMatrix);
+		transformedVertex = Transform(transformedVertex, viewPortMatrix);
+		vertices[i] = transformedVertex;
+	}
+
+	// 12本のエッジを描画
+	int edges[12][2] = {
+		{0, 1}, {1, 3}, {3, 2}, {2, 0}, // 下面
+		{4, 5}, {5, 7}, {7, 6}, {6, 4}, // 上面
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}  // 側面
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		const Vector3& start = vertices[edges[i][0]];
+		const Vector3& end = vertices[edges[i][1]];
+		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), color);
+	}
+}
