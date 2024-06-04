@@ -1,5 +1,8 @@
 #include <Novice.h>
 
+#include "MyMath.h"
+#include "MT3.h"
+
 const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -9,8 +12,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
