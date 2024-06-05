@@ -19,8 +19,8 @@ bool IsCollision(const AABB& aabb, const Segment& segment) {
 	float t5 = (aabb.min.z - segment.origin.z) * invDir.z;
 	float t6 = (aabb.max.z - segment.origin.z) * invDir.z;
 
-	float tmin = std::max({ std::min(t1, t2), std::min(t3, t4), std::min(t5, t6) });
-	float tmax = std::min({ std::max(t1, t2), std::max(t3, t4), std::max(t5, t6) });
+	float tmin = (std::max)({ (std::min)(t1, t2), (std::min)(t3, t4), (std::min)(t5, t6) });
+	float tmax = (std::min)({ (std::max)(t1, t2), (std::max)(t3, t4), (std::max)(t5, t6) });
 
 	if (tmin > tmax) {
 		return false;
@@ -99,6 +99,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Vector3 start = Transform(Transform(segment.origin, worldViewProjectionMatrix), worldViewportMatrix);
 		Vector3 end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), worldViewportMatrix);
+
+		if (IsCollision(aabb, segment)) {
+
+			color = 0xFF0000FF;
+		} else {
+
+			color = 0xFFFFFFFF;
+		}
 
 		///
 		/// ↑更新処理ここまで
