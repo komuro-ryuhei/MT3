@@ -14,12 +14,23 @@ Vector3 cameraRotate{ 0.26f, 0.0f, 0.0f };
 Vector3 cameraTranslate{ 0.0f, 1.9f, -6.49f };
 
 // 行列の計算
-Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, rotate, translate);
-Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
-Matrix4x4 viewMatrix = Inverse4x4(cameraMatrix);
-Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
-Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
+Matrix4x4 worldMatrix;
+Matrix4x4 cameraMatrix;
+Matrix4x4 worldViewMatrix;
+Matrix4x4 projectionMatrix;
+Matrix4x4 worldViewProjectionMatrix;
+Matrix4x4 worldViewportMatrix;
+
+
+void CaluculationMatrix() {
+
+	worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, rotate, translate);
+	cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
+	worldViewMatrix = Inverse4x4(cameraMatrix);
+	projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
+	worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(worldViewMatrix, projectionMatrix));
+	worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
+}
 
 
 // 球
