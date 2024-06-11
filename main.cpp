@@ -5,6 +5,22 @@
 
 const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
+struct OBB {
+	Vector3 center;
+	Vector3 orientations[3];
+	Vector3 size;
+};
+
+bool IsCollision(const OBB& obb, const Sphere& sphere) {
+
+
+}
+
+void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
+
+
+}
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
