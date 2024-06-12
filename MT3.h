@@ -271,3 +271,46 @@ void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Mat
 		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), color);
 	}
 }
+
+struct OBB {
+	Vector3 center;
+	Vector3 orientations[3];
+	Vector3 size;
+};
+
+// OBBの描画
+void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
+	Vector3 vertices[8];
+
+	// OBBの8つの頂点を計算
+	Vector3 halfSizeX = obb.orientations[0] * obb.size.x;
+	Vector3 halfSizeY = obb.orientations[1] * obb.size.y;
+	Vector3 halfSizeZ = obb.orientations[2] * obb.size.z;
+
+	vertices[0] = obb.center - halfSizeX - halfSizeY - halfSizeZ;
+	vertices[1] = obb.center + halfSizeX - halfSizeY - halfSizeZ;
+	vertices[2] = obb.center + halfSizeX + halfSizeY - halfSizeZ;
+	vertices[3] = obb.center - halfSizeX + halfSizeY - halfSizeZ;
+
+	vertices[4] = obb.center - halfSizeX - halfSizeY + halfSizeZ;
+	vertices[5] = obb.center + halfSizeX - halfSizeY + halfSizeZ;
+	vertices[6] = obb.center + halfSizeX + halfSizeY + halfSizeZ;
+	vertices[7] = obb.center - halfSizeX + halfSizeY + halfSizeZ;
+
+	// 頂点を変換して描画
+	for (int i = 0; i < 8; ++i) {
+		vertices[i] = Transform(vertices[i], viewProjectionMatrix);
+		vertices[i] = Transform(vertices[i], viewPortMatrix);
+	}
+
+	// OBBのエッジを描画
+	int edges[12][2] = {
+		{0, 1}, {1, 2}, {2, 3}, {3, 0},
+		{4, 5}, {5, 6}, {6, 7}, {7, 4},
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		Novice::DrawLine(int(vertices[edges[i][0]].x), int(vertices[edges[i][0]].y), int(vertices[edges[i][1]].x), int(vertices[edges[i][1]].y), color);
+	}
+}

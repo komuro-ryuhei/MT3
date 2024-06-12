@@ -3,6 +3,8 @@
 #include "MyMath.h"
 #include "MT3.h"
 
+#include <ImGui.h>
+
 const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
 // Windowsアプリでのエントリーポイント(main関数)
