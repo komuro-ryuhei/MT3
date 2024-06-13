@@ -46,6 +46,20 @@ Vector3 Multiply(float scalar, const Vector3& v) {
 	return Vector3(scalar * v.x, scalar * v.y, scalar * v.z);
 }
 
+Vector3 Multiply(const Matrix4x4& matrix, const Vector3& vector) {
+	// Matrix4x4の回転部分とVector3を乗算
+	float resultX = matrix.m[0][0] * vector.x + matrix.m[1][0] * vector.y + matrix.m[2][0] * vector.z;
+	float resultY = matrix.m[0][1] * vector.x + matrix.m[1][1] * vector.y + matrix.m[2][1] * vector.z;
+	float resultZ = matrix.m[0][2] * vector.x + matrix.m[1][2] * vector.y + matrix.m[2][2] * vector.z;
+
+	// Matrix4x4の平行移動成分を加算
+	resultX += matrix.m[3][0];
+	resultY += matrix.m[3][1];
+	resultZ += matrix.m[3][2];
+
+	return Vector3(resultX, resultY, resultZ);
+}
+
 // 内積(Vector3)
 float Dot(const Vector3& v1, const Vector3& v2) {
 

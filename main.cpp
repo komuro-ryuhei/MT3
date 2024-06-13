@@ -4,34 +4,64 @@
 #include "MT3.h"
 
 #include <ImGui.h>
+#include <algorithm>
 
 const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
-// OBBとの当たり判定関数
-bool IsCollision(const Segment& segment, const OBB& obb) {
-	Vector3 d = segment.diff;
-	Vector3 m = Subtract(segment.origin, obb.center);
+/// <summary>
+/// OBBと線の当たり判定
+/// </summary>
+/// <param name="rotate"></param>
+/// <param name="obb"></param>
+/// <param name="line"></param>
+/// <returns></returns>
+bool IsCollision(const Vector3& rotation, const OBB& obb, const Segment& segment) {
 
-	// サポート点
-	Vector3 axes[15] = {
-		{1, 0, 0}, {0, 1, 0}, {0, 0, 1},
-		obb.orientations[0], obb.orientations[1], obb.orientations[2],
-		Cross(obb.orientations[0], d), Cross(obb.orientations[1], d), Cross(obb.orientations[2], d),
-		Cross(obb.orientations[0], {1, 0, 0}), Cross(obb.orientations[0], {0, 1, 0}), Cross(obb.orientations[0], {0, 0, 1}),
-		Cross(obb.orientations[1], {1, 0, 0}), Cross(obb.orientations[1], {0, 1, 0}), Cross(obb.orientations[1], {0, 0, 1})
-	};
+	// 回転行列の計算（オイラー角から回転行列を計算）
+	Matrix4x4 rotateX = MakeRotateXMatrix(rotation.x);
+	Matrix4x4 rotateY = MakeRotateYMatrix(rotation.y);
+	Matrix4x4 rotateZ = MakeRotateZMatrix(rotation.z);
+	Matrix4x4 rotateMatrix = Multiply(rotateX, Multiply(rotateY, rotateZ));
 
-	for (int i = 0; i < 15; ++i) {
-		float l = fabsf(Dot(m, axes[i]));
-		float r = obb.size.x * fabsf(Dot(obb.orientations[0], axes[i])) +
-			obb.size.y * fabsf(Dot(obb.orientations[1], axes[i])) +
-			obb.size.z * fabsf(Dot(obb.orientations[2], axes[i])) +
-			0.5f * fabsf(Dot(d, axes[i]));
+	// OBBの軸を回転させる
+	Vector3 orientations[3];
+	orientations[0] = Transform(obb.orientations[0], rotateMatrix);
+	orientations[1] = Transform(obb.orientations[1], rotateMatrix);
+	orientations[2] = Transform(obb.orientations[2], rotateMatrix);
 
-		if (l > r) {
-			return false;
-		}
+	// 線分の始点と終点をOBBのローカル座標系に変換
+	Vector3 lineStartLocal = segment.origin - obb.center;
+	Vector3 lineEndLocal = lineStartLocal + segment.diff;
+
+	// 各軸ごとにローカル座標に変換
+	Vector3 lineStartTransformed = { Dot(lineStartLocal, orientations[0]), Dot(lineStartLocal, orientations[1]), Dot(lineStartLocal, orientations[2]) };
+	Vector3 lineEndTransformed = { Dot(lineEndLocal, orientations[0]), Dot(lineEndLocal, orientations[1]), Dot(lineEndLocal, orientations[2]) };
+
+	// 線分とAABBの当たり判定
+	Vector3 boxMin = { -obb.size.x, -obb.size.y, -obb.size.z };
+	Vector3 boxMax = { obb.size.x, obb.size.y, obb.size.z };
+
+	// 線分とAABBの当たり判定を行う（Slab method）
+	float tMin = 0.0f;
+	float tMax = 1.0f;
+
+	for (int i = 0; i < 3; ++i) {
+		float start = (&lineStartTransformed.x)[i];
+		float end = (&lineEndTransformed.x)[i];
+		float min = (&boxMin.x)[i];
+		float max = (&boxMax.x)[i];
+
+		float t0 = (min - start) / (end - start);
+		float t1 = (max - start) / (end - start);
+
+		if (t0 > t1) std::swap(t0, t1);
+
+		tMin = t0 > tMin ? t0 : tMin;
+		tMax = t1 < tMax ? t1 : tMax;
+
+		if (tMin > tMax) return false;
 	}
+
 	return true;
 }
 
@@ -78,6 +108,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+		
+		CaluculationMatrix();
+
 		ImGui::Begin("Window");
 
 		ImGui::DragFloat3("CameraPosition", &cameraTranslate.x, 0.01f);
@@ -117,12 +150,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		obb.orientations[2].z = rotateMatrix.m[2][2];
 
 
-		Vector3 start = Transform(Transform(segment.origin, worldViewProjectionMatrix), viewportMatrix);
-		Vector3 end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), viewportMatrix);
+		Vector3 start = Transform(Transform(segment.origin, worldViewProjectionMatrix), worldViewportMatrix);
+		Vector3 end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), worldViewportMatrix);
 
 
 		// 当たり判定チェック
-		if (IsCollision(segment, obb)) {
+		if (IsCollision(rotate,obb, segment)) {
 			color = 0xFF0000FF;  // 赤色
 		} else {
 			color = 0xFFFFFFFF;  // 白色
@@ -136,11 +169,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		DrawOBB(obb, worldViewProjectionMatrix, viewportMatrix, color);
+		DrawOBB(obb, worldViewProjectionMatrix, worldViewportMatrix, color);
 
-		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), color);
+		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), 0xFFFFFFFF);
 
-		DrawGrid(worldViewProjectionMatrix, viewportMatrix);
+		DrawGrid(worldViewProjectionMatrix, worldViewportMatrix);
 
 		///
 		/// ↑描画処理ここまで
