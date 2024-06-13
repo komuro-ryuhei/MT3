@@ -181,7 +181,7 @@ Vector3 Perpendicular(const Vector3& vector) {
 	return{ 0.0f,-vector.z,vector.y };
 }
 
-void DrawPlane(const Plane& plane, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+void DrawPlane(const Plane& plane, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
 
 	Vector3 center = Multiply(plane.distance, plane.normal); // 1
 	Vector3 perpendiculars[4];
@@ -194,7 +194,7 @@ void DrawPlane(const Plane& plane, const Matrix4x4& viewProjectionMatrix, const 
 	for (uint32_t index = 0; index < 4; ++index) {
 		Vector3 extend = Multiply(2.0f, perpendiculars[index]);
 		Vector3 point = Add(center, extend);
-		points[index] = Transform(Transform(point, viewProjectionMatrix), viewportMatrix);
+		points[index] = Transform(Transform(point, viewProjectionMatrix), viewPortMatrix);
 	}
 	// pointsをそれぞれ結んでDrawLine矩形を描画
 	 // 正方形を描画
@@ -210,7 +210,7 @@ struct Triangle {
 };
 
 void DrawTriangle(
-	const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+	const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix, uint32_t color) {
 
 	// 三角形の頂点をスクリーンスペースに変換
 	Vector3 transformedVertices[3];
@@ -218,7 +218,7 @@ void DrawTriangle(
 		// viewProjection行列を適用
 		transformedVertices[i] = Transform(triangle.vertices[i], viewProjectionMatrix);
 		// viewport行列を適用
-		transformedVertices[i] = Transform(transformedVertices[i], viewportMatrix);
+		transformedVertices[i] = Transform(transformedVertices[i], viewPortMatrix);
 	}
 
 	// 頂点間に線を描画して三角形を形成
