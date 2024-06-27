@@ -23,7 +23,7 @@ Matrix4x4 worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), fl
 
 void CaluculationMatrix() {
 
-	worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, { 0.0f,0.0,0.0f }, translate);
+	worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, rotate, translate);
 	cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
 	worldViewMatrix = Inverse4x4(cameraMatrix);
 	projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
