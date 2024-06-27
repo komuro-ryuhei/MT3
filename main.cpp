@@ -10,18 +10,13 @@ const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
 /// <summary>
 /// OBBと線の当たり判定
-/// </summary>
-/// <param name="rotate"></param>
-/// <param name="obb"></param>
-/// <param name="line"></param>
-/// <returns></returns>
+/// <summary>
 bool IsCollision(const Vector3& rotation, const OBB& obb, const Segment& segment) {
-
 	// 回転行列の計算（オイラー角から回転行列を計算）
 	Matrix4x4 rotateX = MakeRotateXMatrix(rotation.x);
 	Matrix4x4 rotateY = MakeRotateYMatrix(rotation.y);
 	Matrix4x4 rotateZ = MakeRotateZMatrix(rotation.z);
-	Matrix4x4 rotateMatrix = Multiply(rotateX, Multiply(rotateY, rotateZ));
+	Matrix4x4 rotateMatrix = Multiply(Multiply(rotateX, rotateY), rotateZ);
 
 	// OBBの軸を回転させる
 	Vector3 orientations[3];
@@ -51,15 +46,21 @@ bool IsCollision(const Vector3& rotation, const OBB& obb, const Segment& segment
 		float min = (&boxMin.x)[i];
 		float max = (&boxMax.x)[i];
 
-		float t0 = (min - start) / (end - start);
-		float t1 = (max - start) / (end - start);
+		if (start == end) {
+			if (start < min || start > max) {
+				return false;
+			}
+		} else {
+			float t0 = (min - start) / (end - start);
+			float t1 = (max - start) / (end - start);
 
-		if (t0 > t1) std::swap(t0, t1);
+			if (t0 > t1) std::swap(t0, t1);
 
-		tMin = t0 > tMin ? t0 : tMin;
-		tMax = t1 < tMax ? t1 : tMax;
+			tMin = t0 > tMin ? t0 : tMin;
+			tMax = t1 < tMax ? t1 : tMax;
 
-		if (tMin > tMax) return false;
+			if (tMin > tMax) return false;
+		}
 	}
 
 	return true;
