@@ -24,10 +24,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	Sphere sphere[3];
-	sphere[0].center = controlPoints[0];
-	sphere[1].center = controlPoints[1];
-	sphere[2].center = controlPoints[2];
 
+	for (int i = 0; i < 3; i++) {
+
+		sphere[i].radius = 0.01f;
+	}
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -41,7 +42,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		sphere[0].center = controlPoints[0];
+		sphere[1].center = controlPoints[1];
+		sphere[2].center = controlPoints[2];
 
+
+		CaluculationMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
+
+		ImGui::DragFloat3("camera.translate", &cameraTranslate.x, 0.01f);
+		ImGui::DragFloat3("camera.rotate", &cameraRotate.x, 0.01f);
+
+		ImGui::DragFloat3("controlPoints[0]", &controlPoints[0].x, 0.01f);
+		ImGui::DragFloat3("controlPoints[1]", &controlPoints[1].x, 0.01f);
+		ImGui::DragFloat3("controlPoints[2]", &controlPoints[2].x, 0.01f);
 
 		///
 		/// ↑更新処理ここまで
@@ -51,12 +64,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		/*DrawBezier(controlPoints[0], controlPoints[1], controlPoints[2], 0.0f,
-			worldViewProjectionMatrix, worldViewportMatrix, 0x0000FFFF);*/
+		DrawBezier(controlPoints[0], controlPoints[1], controlPoints[2],
+			worldViewProjectionMatrix, worldViewportMatrix, 0x0000FFFF);
 
 		for (int i = 0; i < 3; i++) {
 
-			DrawSphere(sphere[i], worldViewProjectionMatrix, worldViewportMatrix, 0x00000000);
+			DrawSphere(sphere[i], worldViewProjectionMatrix, worldViewportMatrix, 0x000000FF);
 		}
 
 		DrawGrid(worldViewProjectionMatrix, worldViewportMatrix);

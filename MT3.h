@@ -333,14 +333,38 @@ Vector3 Lerp(const Vector3& a, const Vector3& b, float t) {
 	return length;
 }
 
-//2次元ベジェ曲線上の点を求める関数
-//Vector3 DrawBezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t,
-//	const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
-//
-//	Vector3 p0p1 = Lerp(p0, p1, t);
-//	Vector3 p1p2 = Lerp(p1, p2, t);
-//
-//	Vector3 p = Lerp(p0p1, p1p2, t);
-//
-//	return p;
-//}
+// 2次元ベジェ曲線上の点を求める関数
+Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t) {
+
+	Vector3 p0p1 = Lerp(p0, p1, t);
+	Vector3 p1p2 = Lerp(p1, p2, t);
+	return Lerp(p0p1, p1p2, t);
+}
+
+// ベジエ曲線の描画
+void DrawBezier(const Vector3& p0, const Vector3& p1, const Vector3& p2,
+	const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	const int segments = 100;
+	// Vector3 previousPoint = p0;
+
+	for (int i = 0; i < segments; ++i) {
+
+		float t1 = float(i) / float(segments);
+		float t2 = float(i + 1) / float(segments);
+
+		Vector3 previousPoint = Bezier(p0, p1, p2, t1);
+		Vector3 currentPoint = Bezier(p0, p1, p2, t2);
+
+		// ビュープロジェクション行列とビューポート行列を使用してスクリーン座標系に変換
+		Vector3 screenPreviousPoint = Transform(previousPoint, viewProjectionMatrix);
+		Vector3 screenCurrentPoint = Transform(currentPoint, viewProjectionMatrix);
+
+		// スクリーン座標系からビューポート座標系に変換
+		screenPreviousPoint = Transform(screenPreviousPoint, viewportMatrix);
+		screenCurrentPoint = Transform(screenCurrentPoint, viewportMatrix);
+
+		// 変換した座標を使って表示
+		Novice::DrawLine(int(screenPreviousPoint.x), int(screenPreviousPoint.y), int(screenCurrentPoint.x), int(screenCurrentPoint.y), color);
+	}
+}
