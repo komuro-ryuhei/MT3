@@ -98,7 +98,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		DrawSphere(sphere, worldViewProjectionMatrix, worldViewportMatrix, ball.color);
 
-		Novice::DrawLine(int(spring.ancor.x), int(spring.ancor.y), int(sphere.center.x), int(sphere.center.y), 0xFFFFFFFF);
+		DrawLine(spring.ancor, sphere.center, worldViewProjectionMatrix, worldViewportMatrix, 0xFFFFFFFF);
 
 		///
 		/// ↑描画処理ここまで
