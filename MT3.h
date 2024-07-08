@@ -322,10 +322,10 @@ void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix
 	}
 }
 
-void DrawLine(const Vector3& p1, const Vector3& p2, const Matrix4x4& wvpMatrix, const Matrix4x4& viewportMatrix, int32_t color) {
+void DrawLine(const Vector3& p1, const Vector3& p2, const Matrix4x4& wvpMatrix1, const Matrix4x4& wvpMatrix2, const Matrix4x4& viewportMatrix, int32_t color) {
 
-	Vector3 startPos = Transform(p1, wvpMatrix);
-	Vector3 endPos = Transform(p2, wvpMatrix);
+	Vector3 startPos = Transform(p1, wvpMatrix1);
+	Vector3 endPos = Transform(p2, wvpMatrix2);
 
 	startPos = Transform(startPos, viewportMatrix);
 	endPos = Transform(endPos, viewportMatrix);

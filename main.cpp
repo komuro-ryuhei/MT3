@@ -87,10 +87,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Matrix4x4 worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		for (int i = 0; i < 3; i++) {
+		sphere[0].center = Transform(translates[0], sholderWvpMatrix);
+		sphere[1].center = Transform(translates[1], elbowWvpMatrix);
+		sphere[2].center = Transform(translates[2], handWvpMatrix);
 
-			sphere[i].center = translates[i];
-		}
 
 
 		ImGui::DragFloat3("camera.translate", &cameraTranslate.x, 0.01f);
@@ -119,8 +119,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawSphere(sphere[1], elbowWvpMatrix, worldViewportMatrix, sphere[1].color);
 		DrawSphere(sphere[2], handWvpMatrix, worldViewportMatrix, sphere[2].color);
 
-		DrawLine(sphere[0].center, sphere[1].center, sholderLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
-		DrawLine(sphere[1].center, sphere[2].center, elbowLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
+		DrawLine(sphere[0].center, sphere[1].center, sholderLineWvpMatrix, elbowLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
+		DrawLine(sphere[1].center, sphere[2].center, elbowLineWvpMatrix, handLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
 
 		///
 		/// ↑描画処理ここまで
