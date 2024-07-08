@@ -8,30 +8,31 @@ int kWindowHeight = 720;
 
 Vector3 cameraScale{ 1.0f, 1.0f, 1.0f };
 Vector3 cameraRotate{ 0.26f, 0.0f, 0.0f };
-Vector3 cameraTranslate{ 0.0f, 1.9f, -6.49f };
+Vector3 cameraTranslate{ 0.0f, 2.9f, -6.49f };
 
 // 行列の計算
-Matrix4x4 worldMatrix;
-Matrix4x4 cameraMatrix;
-Matrix4x4 worldViewMatrix;
-Matrix4x4 projectionMatrix;
-Matrix4x4 worldViewProjectionMatrix;
-Matrix4x4 worldViewportMatrix;
+// Matrix4x4 worldMatrix;
+//Matrix4x4 cameraMatrix;
+//Matrix4x4 worldViewMatrix;
+//Matrix4x4 projectionMatrix;
+//Matrix4x4 worldViewProjectionMatrix;
+//Matrix4x4 worldViewportMatrix;
 
-void CaluculationMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
-
-	worldMatrix = MakeAffineMatrix(scale, rotate, translate);
-	cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
-	worldViewMatrix = Inverse4x4(cameraMatrix);
-	projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
-	worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(worldViewMatrix, projectionMatrix));
-	worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
-}
+//void CaluculationMatrix(Vector3 scale, Vector3 rotate, Vector3 translate,Matrix4x4 worldMatrix) {
+//
+//	worldMatrix = MakeAffineMatrix(scale, rotate, translate);
+//	cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
+//	worldViewMatrix = Inverse4x4(cameraMatrix);
+//	projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
+//	worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(worldViewMatrix, projectionMatrix));
+//	worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
+//}
 
 // 球
 struct Sphere {
 	Vector3 center;
 	float radius;
+	int32_t color;
 };
 
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
@@ -99,17 +100,17 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 
 			// world座標系でのa,b,cを求める
 			Vector3 a, b, c;
-			a = { sphere.radius * std::cos(lat) * std::cos(lon) + sphere.center.x,
-				  sphere.radius * std::sin(lat) + sphere.center.y,
-				  sphere.radius * std::cos(lat) * std::sin(lon) + sphere.center.z };
+			a = { sphere.radius * std::cos(lat) * std::cos(lon),
+				  sphere.radius * std::sin(lat),
+				  sphere.radius * std::cos(lat) * std::sin(lon)};
 
-			b = { sphere.radius * std::cos(lat + kLatEvery) * std::cos(lon) + sphere.center.x,
-				  sphere.radius * std::sin(lat + kLatEvery) + sphere.center.y,
-				  sphere.radius * std::cos(lat + kLatEvery) * std::sin(lon) + sphere.center.z };
+			b = { sphere.radius * std::cos(lat + kLatEvery) * std::cos(lon),
+				  sphere.radius * std::sin(lat + kLatEvery),
+				  sphere.radius * std::cos(lat + kLatEvery) * std::sin(lon)};
 
-			c = { sphere.radius * std::cos(lat) * std::cos(lon + kLonEvery) + sphere.center.x,
-				  sphere.radius * std::sin(lat) + sphere.center.y,
-				  sphere.radius * std::cos(lat) * std::sin(lon + kLonEvery) + sphere.center.z };
+			c = { sphere.radius * std::cos(lat) * std::cos(lon + kLonEvery),
+				  sphere.radius * std::sin(lat),
+				  sphere.radius * std::cos(lat) * std::sin(lon + kLonEvery)};
 
 			// a,b,cをスクリーン座標まで変換
 			// ビュープロジェクション行列とビューポート行列を使用してスクリーン座標系に変換
@@ -319,4 +320,15 @@ void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix
 	for (int i = 0; i < 12; ++i) {
 		Novice::DrawLine(int(vertices[edges[i][0]].x), int(vertices[edges[i][0]].y), int(vertices[edges[i][1]].x), int(vertices[edges[i][1]].y), color);
 	}
+}
+
+void DrawLine(const Vector3& p1, const Vector3& p2, const Matrix4x4& wvpMatrix, const Matrix4x4& viewportMatrix, int32_t color) {
+
+	Vector3 startPos = Transform(p1, wvpMatrix);
+	Vector3 endPos = Transform(p2, wvpMatrix);
+
+	startPos = Transform(startPos, viewportMatrix);
+	endPos = Transform(endPos, viewportMatrix);
+
+	Novice::DrawLine(int(startPos.x), int(startPos.y), int(endPos.x), int(endPos.y), color);
 }
