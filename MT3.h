@@ -6,24 +6,21 @@
 int kWindowWidth = 1280;
 int kWindowHeight = 720;
 
-Vector3 rotate{ 0.0f,0.0f,0.0f };
-Vector3 translate{ 0.0f,0.0f,0.0f };
-
 Vector3 cameraScale{ 1.0f, 1.0f, 1.0f };
 Vector3 cameraRotate{ 0.26f, 0.0f, 0.0f };
 Vector3 cameraTranslate{ 0.0f, 1.9f, -6.49f };
 
+Matrix4x4 worldMatrix;
+Matrix4x4 cameraMatrix;
+Matrix4x4 worldViewMatrix;
+Matrix4x4 projectionMatrix;
+Matrix4x4 worldViewProjectionMatrix;
+Matrix4x4 worldViewportMatrix;
+
 // 行列の計算
-Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, rotate, translate);
-Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
-Matrix4x4 worldViewMatrix = Inverse4x4(cameraMatrix);
-Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
-Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(worldViewMatrix, projectionMatrix));
-Matrix4x4 worldViewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
+void CaluculationMatrix(Vector3 scale, Vector3 rotate, Vector3 translate) {
 
-void CaluculationMatrix() {
-
-	worldMatrix = MakeAffineMatrix({ 1.0f,1.0,1.0f }, rotate, translate);
+	worldMatrix = MakeAffineMatrix(scale, rotate, translate);
 	cameraMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
 	worldViewMatrix = Inverse4x4(cameraMatrix);
 	projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);

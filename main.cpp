@@ -135,7 +135,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 
-		CaluculationMatrix();
+		CaluculationMatrix({ 1.0f,1.0f,1.0f }, rotate1, {0.0f,0.0f,0.0f});
+		CaluculationMatrix({ 1.0f,1.0f,1.0f }, rotate2, {0.0f,0.0f,0.0f});
 
 
 		// 回転行列を作成
