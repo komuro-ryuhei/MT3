@@ -77,9 +77,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 handWvpMatrix = Multiply(handWorldMatirx, Multiply(worldViewMatrix, projectionMatrix));
 
 
-		Matrix4x4 sholderLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, translates[0]);
-		Matrix4x4 elbowLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, translates[1]);
-		Matrix4x4 handLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, translates[2]);
+		Matrix4x4 sholderLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, Vector3(sholderWorldMatirx.m[3][0], sholderWorldMatirx.m[3][1], sholderWorldMatirx.m[3][2]));
+		Matrix4x4 elbowLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, Vector3(elbowWorldMatirx.m[3][0], elbowWorldMatirx.m[3][1], elbowWorldMatirx.m[3][2]));
+		Matrix4x4 handLineWorldMatrix = MakeAffineMatrix({ 0.1f,0.1f,0.1f }, { 0.0f,0.0f,0.0f }, Vector3(handWorldMatirx.m[3][0], handWorldMatirx.m[3][1], handWorldMatirx.m[3][2]));
 
 		Matrix4x4 sholderLineWvpMatrix = Multiply(sholderLineWorldMatrix, Multiply(worldViewMatrix, projectionMatrix));
 		Matrix4x4 elbowLineWvpMatrix = Multiply(elbowLineWorldMatrix, Multiply(worldViewMatrix, projectionMatrix));
@@ -119,8 +119,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawSphere(sphere[1], elbowWvpMatrix, worldViewportMatrix, sphere[1].color);
 		DrawSphere(sphere[2], handWvpMatrix, worldViewportMatrix, sphere[2].color);
 
-		DrawLine(sphere[0].center, sphere[1].center, sholderWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
-		DrawLine(sphere[1].center, sphere[2].center, elbowWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
+		DrawLine(sphere[0].center, sphere[1].center, sholderLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
+		DrawLine(sphere[1].center, sphere[2].center, elbowLineWvpMatrix, worldViewportMatrix, 0xFFFFFFFF);
 
 		///
 		/// ↑描画処理ここまで
