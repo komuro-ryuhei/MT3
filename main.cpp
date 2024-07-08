@@ -17,6 +17,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
+	Vector3 controlPoints[3] = {
+		{-0.8f,0.58f,1.0f},
+		{1.76f,1.0f,-0.3f},
+		{0.94f,-0.7f,2.3f},
+	};
+
+	Sphere sphere[3];
+	sphere[0].center = controlPoints[0];
+	sphere[1].center = controlPoints[1];
+	sphere[2].center = controlPoints[2];
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -30,6 +41,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -37,6 +50,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+
+		/*DrawBezier(controlPoints[0], controlPoints[1], controlPoints[2], 0.0f,
+			worldViewProjectionMatrix, worldViewportMatrix, 0x0000FFFF);*/
+
+		for (int i = 0; i < 3; i++) {
+
+			DrawSphere(sphere[i], worldViewProjectionMatrix, worldViewportMatrix, 0x00000000);
+		}
+
+		DrawGrid(worldViewProjectionMatrix, worldViewportMatrix);
 
 		///
 		/// ↑描画処理ここまで

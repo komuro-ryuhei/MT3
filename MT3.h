@@ -320,3 +320,27 @@ void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix
 		Novice::DrawLine(int(vertices[edges[i][0]].x), int(vertices[edges[i][0]].y), int(vertices[edges[i][1]].x), int(vertices[edges[i][1]].y), color);
 	}
 }
+
+//線形補間
+Vector3 Lerp(const Vector3& a, const Vector3& b, float t) {
+
+	Vector3 length;
+
+	length.x = t * a.x + (1.0f - t) * b.x;
+	length.y = t * a.y + (1.0f - t) * b.y;
+	length.z = t * a.z + (1.0f - t) * b.z;
+
+	return length;
+}
+
+//2次元ベジェ曲線上の点を求める関数
+//Vector3 DrawBezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t,
+//	const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
+//
+//	Vector3 p0p1 = Lerp(p0, p1, t);
+//	Vector3 p1p2 = Lerp(p1, p2, t);
+//
+//	Vector3 p = Lerp(p0p1, p1p2, t);
+//
+//	return p;
+//}
