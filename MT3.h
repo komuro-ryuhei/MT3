@@ -320,3 +320,14 @@ void DrawOBB(const OBB& obb, const Matrix4x4& viewProjectionMatrix, const Matrix
 		Novice::DrawLine(int(vertices[edges[i][0]].x), int(vertices[edges[i][0]].y), int(vertices[edges[i][1]].x), int(vertices[edges[i][1]].y), color);
 	}
 }
+
+void DrawLine(const Vector3& p1, const Vector3& p2, const Matrix4x4& wvpMatrix1, const Matrix4x4& wvpMatrix2, const Matrix4x4& viewportMatrix, int32_t color) {
+
+	Vector3 startPos = Transform(p1, wvpMatrix1);
+	Vector3 endPos = Transform(p2, wvpMatrix2);
+
+	startPos = Transform(startPos, viewportMatrix);
+	endPos = Transform(endPos, viewportMatrix);
+
+	Novice::DrawLine(int(startPos.x), int(startPos.y), int(endPos.x), int(endPos.y), color);
+}
