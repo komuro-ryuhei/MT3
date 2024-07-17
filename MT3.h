@@ -34,6 +34,15 @@ struct Sphere {
 	float radius;
 };
 
+struct Ball {
+	Vector3 position;
+	float mass;
+	Vector3 velocity;
+	Vector3 acceleration;
+	float radius;
+	unsigned int color;
+};
+
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewPortMatrix) {
 	const float kGridHalfWidth = 2.0f; // Grid半分の幅
 	const uint32_t kSubdivision = 10; // 分割数
