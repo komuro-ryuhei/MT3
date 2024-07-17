@@ -8,6 +8,7 @@
 const char kWindowTitle[] = "LC1B_13_コムロ_リュウヘイ";
 
 Vector3 Reflect(const Vector3& input, const Vector3& normal) {
+	
 	Vector3 reflect = input - normal * Dot(input, normal) * 2.0f;
 	return reflect;
 }
